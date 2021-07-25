@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import "./estilo.css";
+import { ReactComponent as DeleteSVG } from "../../assets/img/delete.svg";
 class ListaDeCategorias extends Component {
     constructor() {
         super();
-        this.state = { categorias: [] }
+        this.state = { categorias: [], nomeCategoria:'' }
         this._novasCategorias = this._novasCategorias.bind(this)
     }
 
@@ -23,7 +24,17 @@ class ListaDeCategorias extends Component {
         if (e.key === "Enter") {
             let valorCategoria = e.target.value;
             this.props.adicionarCategoria(valorCategoria);
+            this.setState({nomeCategoria: ''}); 
         }
+    }
+
+    _handleClick(event){
+        this.props.adicionarCategoria(this.state.nomeCategoria);
+        this.setState({nomeCategoria: ''}); 
+    }
+
+    _handleChange(event){
+        this.setState({nomeCategoria: event.target.value}); 
     }
 
     render() {
@@ -31,10 +42,19 @@ class ListaDeCategorias extends Component {
             <section className="lista-categorias">
                 <ul className="lista-categorias_lista">
                     {this.state.categorias.map((categoria, index) => {
-                        return <li key={index} className="lista-categorias_item">{categoria}</li>;
+                        return <li key={index} className="lista-categorias_item">{categoria}<DeleteSVG /></li>;
                     })}
                 </ul>
-                <input type="text" className="lista-categorias_input" placeholder="Adicionar Categoria" onKeyUp={this._handleEventoInput.bind(this)} />
+                <input 
+                    type="text" 
+                    className="lista-categorias_input" 
+                    placeholder="Adicionar Categoria" 
+                    onChange = {this._handleChange.bind(this)}
+                    onKeyUp = {this._handleEventoInput.bind(this)}
+                    value = {this.state.nomeCategoria}
+                />
+
+                <button onClick={this._handleClick.bind(this)}>Adicionar Categoria</button>
             </section>
         )
     }
